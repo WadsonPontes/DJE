@@ -38,11 +38,13 @@ async function loginAccount(formData: FormData) {
 
     if (user) {
         const isMatch = await bcrypt.compare(senha, user.password)
-    }
 
-    redirect('/login')
+        if (isMatch) {
+            redirect('/kanban')
+        }
+    }
 }
 
-const AuthActions = { createAccount }
+const AuthActions = { createAccount, loginAccount }
 
 export default AuthActions

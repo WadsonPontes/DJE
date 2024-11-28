@@ -13,21 +13,22 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import AuthActions from "../actions/auth"
 
 export function CardWithFormLogin() {
   return (
     <Card className="w-[350px]">
-      <CardHeader className="items-center">
-        <Image
-          src="/logo.png"
-          alt="Logo"
-          width={320}
-          height={90}
-          priority
-        />
-      </CardHeader>
-      <CardContent>
-        <form>
+      <form action={AuthActions.loginAccount}>
+        <CardHeader className="items-center">
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={320}
+            height={90}
+            priority
+          />
+        </CardHeader>
+        <CardContent>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email">E-mail:</Label>
@@ -38,14 +39,14 @@ export function CardWithFormLogin() {
               <Input id="senha" name="senha" type="password" />
             </div>
           </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex flex-col justify-between">
-        <Button variant="green">Login</Button>
-        <Link href="/signup" className={buttonVariants({ variant: 'link' })} >
-          Não possui uma conta? Cadastre-se
-        </Link>
-      </CardFooter>
+        </CardContent>
+        <CardFooter className="flex flex-col justify-between">
+          <Button variant="green" type="submit">Login</Button>
+          <Link href="/signup" className={buttonVariants({ variant: 'link' })} >
+            Não possui uma conta? Cadastre-se
+          </Link>
+        </CardFooter>
+      </form>
     </Card>
   )
 }
