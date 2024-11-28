@@ -11,7 +11,7 @@ async function createAccount(formData: FormData) {
     const name = formData.get('nome') as string
     const email = formData.get('email') as string
     const senha = formData.get('senha') as string
-    const confirmarsenha = formData.get('confirmarsenha') as string
+    //const confirmarsenha = formData.get('confirmarsenha') as string
     const password = await bcrypt.hash(senha, 10)
 
     await prisma.user.create({

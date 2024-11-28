@@ -1,5 +1,4 @@
 import { CardWithFormSignUp } from "@/components/CardWithFormSignUp";
-import Image from "next/image";
 
 export default function SignUpPage() {
   return (
