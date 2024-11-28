@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import AuthService from "./services/auth-service"
 
-export const config = {
-    matcher: '/((?!_next/static|_next/image|image|favicon.ico).*)',
-}
+export const config = { matcher: '/((?!_next/static|_next/image|favicon.ico).*)',};
 
 const publicRoutes = ['/signup', '/login']
 const privateRoutes = ['/kanban', '/api/logout']
