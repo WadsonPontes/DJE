@@ -1,3 +1,4 @@
+import AuthService from '@/services/auth-service'
 import { PrismaClient } from '@prisma/client'
 import * as bcrypt from 'bcrypt'
 import { redirect } from 'next/navigation'
@@ -40,6 +41,8 @@ async function loginAccount(formData: FormData) {
         const isMatch = await bcrypt.compare(senha, user.password)
 
         if (isMatch) {
+            await AuthService.createSessionToken({sub: user.id, name: user.name, email: user.email})
+
             redirect('/kanban')
         }
     }
