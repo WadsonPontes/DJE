@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export function CardWithFormLogin() {
+export function CardWithFormSignUp() {
   return (
     <Card className="w-[350px]">
       <CardHeader className="items-center">
@@ -30,21 +30,29 @@ export function CardWithFormLogin() {
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="email">E-mail:</Label>
+              <Label htmlFor="nome">Seu nome completo: <span className="text-red-500 font-bold">*</span></Label>
+              <Input id="nome" name="nome" type="text" />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="email">E-mail: <span className="text-red-500 font-bold">*</span></Label>
               <Input id="email" name="email" type="email" />
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="senha">Senha:</Label>
+              <Label htmlFor="senha">Senha: <span className="text-red-500 font-bold">*</span></Label>
               <Input id="senha" name="senha" type="password" />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="confirmarsenha">Confirme sua senha: <span className="text-red-500 font-bold">*</span></Label>
+              <Input id="confirmarsenha" name="confirmarsenha" type="password" />
             </div>
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col justify-between">
-        <Button variant="green">Login</Button>
-        <Link href="/signup" className={buttonVariants({ variant: 'link' })} >
-          Não possui uma conta? Cadastre-se
+        <Link href="/login" className={buttonVariants({ variant: 'minilink' })} >
+          Já possui uma conta? Fazer o login
         </Link>
+        <Button variant="green">Criar conta</Button>
       </CardFooter>
     </Card>
   )
