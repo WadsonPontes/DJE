@@ -24,6 +24,25 @@ async function createAccount(formData: FormData) {
     redirect('/login')
 }
 
+async function loginAccount(formData: FormData) {
+    'use server'
+
+    const email = formData.get('email') as string
+    const senha = formData.get('senha') as string
+
+    const user = await prisma.user.findFirst({
+        where: {
+            email,
+        }
+    })
+
+    if (user) {
+        const isMatch = await bcrypt.compare(senha, user.password)
+    }
+
+    redirect('/login')
+}
+
 const AuthActions = { createAccount }
 
 export default AuthActions
