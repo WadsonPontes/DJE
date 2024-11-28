@@ -43,10 +43,17 @@ async function isSessionValid() {
     return false
 }
 
+async function destroySession() {
+    const cookieStore = await cookies()
+
+    cookieStore.delete('session')
+}
+
 const AuthService = {
     openSessionToken,
     createSessionToken,
     isSessionValid,
+    destroySession,
 }
 
 export default AuthService

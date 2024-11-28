@@ -6,7 +6,7 @@ export const config = {
 }
 
 const publicRoutes = ['/signup', '/login']
-const privateRoutes = ['/kanban']
+const privateRoutes = ['/kanban', '/api/logout']
 
 export async function middleware(req: NextRequest) {
     const pathname = req.nextUrl.pathname
