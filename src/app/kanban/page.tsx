@@ -7,90 +7,29 @@ import { IoSearch } from "react-icons/io5"
 import { IoMdTime } from "react-icons/io"
 import { FaRegCalendar } from "react-icons/fa"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DragDropContext, Draggable, Droppable, DropResult } from "@hello-pangea/dnd"
+import { Coluna, Processo } from '@prisma/client';
+import { format, formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export default function KanbanPage() {
-  const [dados, setDados] = useState([
-    {
-      id: "0",
-      titulo: 'Nova Publicação',
-      cards: [
-        {
-          id: "0",
-          numero: "5018120-21.2021.8.13.0022",
-          hora: '3h',
-          data: '21/10/2024',
-        },
-        {
-          id: "1",
-          numero: "Numero do processo",
-          hora: '30s',
-          data: '21/10/2024',
-        },
-        {
-          id: "2",
-          numero: "Numero desconhecido",
-          hora: '30d',
-          data: '21/10/2024',
-        },
-      ],
-    },
-    {
-      id: "1",
-      titulo: 'Publicação Lida',
-      cards: [
-        {
-          id: "3",
-          numero: "5018120-21.2021.8.13.0022",
-          hora: '3h',
-          data: '21/10/2024',
-        },
-        {
-          id: "4",
-          numero: "Numero do processo",
-          hora: '30s',
-          data: '21/10/2024',
-        },
-        {
-          id: "5",
-          numero: "Numero desconhecido",
-          hora: '30d',
-          data: '21/10/2024',
-        },
-      ],
-    },
-    {
-      id: "2",
-      titulo: 'Enviar para Advogado Responsável',
-      cards: [
-      ],
-    },
-    {
-      id: "3",
-      titulo: 'Concluído',
-      cards: [
-        {
-          id: "6",
-          numero: "5018120-21.2021.8.13.0022",
-          hora: '3h',
-          data: '21/10/2024',
-        },
-        {
-          id: "7",
-          numero: "Numero do processo",
-          hora: '30s',
-          data: '21/10/2024',
-        },
-        {
-          id: "8",
-          numero: "Numero desconhecido",
-          hora: '30d',
-          data: '21/10/2024',
-        },
-      ],
-    },
-  ])
+  const [dados, setDados] = useState<(Coluna & { processos: Processo[] })[]>([]) // useState<Coluna[]>([])
+
+  async function buscarDados() {
+    const res = await fetch('/api/kanban', {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+    })
+
+    if (res.ok) {
+      const message = await res.json()
+
+      setDados(message)
+    }
+  }
 
   async function onDragEnd(result: DropResult) {
     const { source, destination } = result;
@@ -101,18 +40,22 @@ export default function KanbanPage() {
       const items = Array.from(dados)
 
       if (sInd === dInd) {
-        const [target] = items[sInd].cards.splice(source.index, 1)
-        items[sInd].cards.splice(destination.index, 0, target)
+        const [target] = items[sInd].processos.splice(source.index, 1)
+        items[sInd].processos.splice(destination.index, 0, target)
   
         setDados(items)
       } else {
-        const [target] = items[sInd].cards.splice(source.index, 1)
-        items[dInd].cards.splice(destination.index, 0, target)
+        const [target] = items[sInd].processos.splice(source.index, 1)
+        items[dInd].processos.splice(destination.index, 0, target)
 
         setDados(items)
       }
     }
   }
+
+  useEffect(() => {
+    buscarDados()
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -170,15 +113,15 @@ export default function KanbanPage() {
                     <div className="bg-white shadow rounded p-4" style={{ minHeight: '72vh' }} ref={provided.innerRef} {...provided.droppableProps}>
                       <h2 className="mb-4 text-lg font-bold">{coluna.titulo}</h2>
                       <div className="space-y-4">
-                        {coluna.cards.length === 0 && <p className="text-gray-400">Nenhum card encontrado</p>}
-                        {coluna.cards.map((card, i) => (
+                        {coluna.processos.length === 0 && <p className="text-gray-400">Nenhum card encontrado</p>}
+                        {coluna.processos.map((card, i) => (
                           <Draggable key={card.id} draggableId={card.id} index={i}>
                             {(provided) => (
                               <div className="p-4 bg-gray-50 border rounded shadow-sm" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                 <p>{card.numero}</p>
                                 <div className="flex items-center justify-between text-sm text-gray-500">
-                                  <span className="flex"><IoMdTime size={20} style={{ marginRight: '5px' }} />{card.hora}</span>
-                                  <span className="flex"><FaRegCalendar size={18} style={{ marginRight: '5px' }} />{card.data}</span>
+                                  <span className="flex"><IoMdTime size={20} style={{ marginRight: '5px' }} />{formatDistanceToNow(card.dataAtualizacao, { addSuffix: true, locale: ptBR })}</span>
+                                  <span className="flex"><FaRegCalendar size={18} style={{ marginRight: '5px' }} />{format(card.dataPublicacao, "dd/MM/yyyy")}</span>
                                 </div>
                               </div>
                             )}
