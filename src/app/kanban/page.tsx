@@ -8,7 +8,7 @@ import { IoMdTime } from "react-icons/io"
 import { FaRegCalendar } from "react-icons/fa"
 import Link from "next/link"
 import { useState } from "react"
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd"
+import { DragDropContext, Draggable, Droppable, DropResult } from "@hello-pangea/dnd"
 
 export default function KanbanPage() {
   const [dados, setDados] = useState([
@@ -92,7 +92,7 @@ export default function KanbanPage() {
     },
   ])
 
-  async function onDragEnd(result: any) {
+  async function onDragEnd(result: DropResult) {
     const { source, destination } = result;
 
     if (destination) {
