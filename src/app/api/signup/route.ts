@@ -1,4 +1,3 @@
-import AuthService from "@/services/auth-service"
 import { NextResponse, NextRequest } from "next/server"
 import { PrismaClient } from '@prisma/client'
 import * as bcrypt from 'bcrypt'

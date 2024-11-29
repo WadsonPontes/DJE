@@ -53,7 +53,7 @@ export function CardWithFormSignUp() {
     resolver: zodResolver(createUserFormSchema),
   })
 
-  async function signUpUser(data: any) {
+  async function signUpUser(data: {email: string; senha: string; nome: string; confirmarsenha: string;}) {
     const user = JSON.stringify(data, null, 2);
     
     const res = await fetch('/api/signup', {
