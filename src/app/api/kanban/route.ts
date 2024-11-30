@@ -4,13 +4,23 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export async function GET(req: NextRequest) {
-    const coluna = await prisma.coluna.findMany({
-        include: {
-            processos: true,
+    const colunas = await prisma.coluna.findMany({
+      orderBy: {
+        posicao: 'asc',
+      },
+      include: {
+        processos: {
+          orderBy: {
+            posicao: 'asc',
+          },
         },
-    })
-
-    if (coluna) {
-        return NextResponse.json(coluna)
+      },
+    });
+  
+    if (colunas) {
+      return NextResponse.json(colunas);
+    } else {
+      return NextResponse.json({ message: "Nenhuma coluna encontrada" }, { status: 404 });
     }
 }
+  

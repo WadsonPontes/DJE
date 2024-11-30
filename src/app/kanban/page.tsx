@@ -39,16 +39,27 @@ export default function KanbanPage() {
       const dInd = +destination.droppableId;
       const items = Array.from(dados)
 
-      if (sInd === dInd) {
-        const [target] = items[sInd].processos.splice(source.index, 1)
-        items[sInd].processos.splice(destination.index, 0, target)
-  
-        setDados(items)
-      } else {
-        const [target] = items[sInd].processos.splice(source.index, 1)
-        items[dInd].processos.splice(destination.index, 0, target)
+      const [target] = items[sInd].processos.splice(source.index, 1)
+      items[dInd].processos.splice(destination.index, 0, target)
 
-        setDados(items)
+      target.posicao = (items[dInd].processos[Math.max(destination.index-1, 0)].posicao + items[dInd].processos[Math.min(destination.index+1, items[dInd].processos.length-1)].posicao) / 2
+
+      setDados(items)
+
+      const res = await fetch('/api/processo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idProcesso: target.id,
+          idColuna: items[dInd].id,
+          novaPosicao: target.posicao,
+        }),
+      })
+    
+      if (!res.ok) {
+        console.error('Erro ao atualizar processo no backend:', await res.text())
       }
     }
   }

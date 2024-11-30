@@ -25,7 +25,10 @@ model User {
 model Coluna {
   id String @id @default(uuid())
   titulo String
+  posicao Float
   processos Processo[]
+
+  @@index([posicao(sort: Asc)])
 }
 
 model Processo {
@@ -33,6 +36,9 @@ model Processo {
   numero String
   dataAtualizacao DateTime @default(now()) @updatedAt()
   dataPublicacao DateTime
+  posicao Float
   colunaId         String
   coluna           Coluna      @relation(fields: [colunaId], references: [id])
+
+  @@index([colunaId, posicao(sort: Asc)])
 }
